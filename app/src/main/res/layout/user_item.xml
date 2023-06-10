@@ -27,14 +27,13 @@
         app:layout_constraintStart_toStartOf="@+id/tv_fullname"
         app:layout_constraintTop_toBottomOf="@+id/tv_fullname" />
 
-    <Button
-        android:id="@+id/btn_details"
-        android:layout_width="80dp"
-        android:layout_height="40dp"
-        android:text="Details"
-        android:textSize="10sp"
+    <ImageButton
+        android:id="@+id/ib_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/tv_city"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_fullname" />
+        app:layout_constraintTop_toTopOf="@+id/tv_fullname"
+        app:srcCompat="@drawable/ic_details" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
