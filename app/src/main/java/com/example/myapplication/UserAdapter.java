@@ -1,7 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Context;
-import android.util.Log;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,11 +44,16 @@ public class UserAdapter extends BaseAdapter {
         User user = (User) getItem(position);
 
         TextView tv_fullname = (TextView) view.findViewById(R.id.tv_fullname);
-        TextView tv_gender = (TextView) view.findViewById(R.id.tv_gender);
+        TextView tv_position = (TextView) view.findViewById(R.id.tv_position);
         TextView tv_city= (TextView) view.findViewById(R.id.tv_city);
         tv_fullname.setText(user.getFullname());
-        tv_gender.setText(user.getGender());
+        tv_position.setText(String.format("#%d", position+1));
         tv_city.setText(user.getCity());
+
+        if(user.getGender().equals("male")){
+            view.setBackgroundColor(Color.parseColor("#27B5F3"));
+        }
+        else view.setBackgroundColor(Color.parseColor("#F69EED"));
 
         return view;
     }
