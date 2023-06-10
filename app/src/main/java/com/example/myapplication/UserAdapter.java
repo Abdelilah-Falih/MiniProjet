@@ -21,10 +21,10 @@ public class UserAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<User> users;
 
-    private final long CLICK_DURATION = 200;
+    private final long MIN_CLICK_DURATION = 1000;
+    private final long MAX_CLICK_DURATION = 2000;
     LayoutInflater inflater;
 
-    boolean isVisible ;
 
     public UserAdapter(Context context, ArrayList<User> users) {
         this.context = context;
@@ -53,36 +53,30 @@ public class UserAdapter extends BaseAdapter {
         User user = (User) getItem(position);
 
         TextView tv_fullname = (TextView) view.findViewById(R.id.tv_fullname);
-        TextView tv_city= (TextView) view.findViewById(R.id.tv_city);
-        ImageView iv_checked_item= (ImageView) view.findViewById(R.id.iv_checked_item);
+        TextView tv_city = (TextView) view.findViewById(R.id.tv_city);
         tv_fullname.setText(user.getFullname());
         tv_city.setText(user.getCity());
-        view.setOnLongClickListener(v->{
-            AlertDialog.Builder alert = new AlertDialog.Builder(context);
-            alert.setTitle("User Info");
-            alert.setMessage(String.format("Full name : %s\ngender: %s\ncity: %s", user.getFullname(), user.getGender(), user.getCity()));
-            alert.setPositiveButton("ok", null);
-            alert.setCancelable(false);
-            alert.create().show();
-            return true;
-        });
 
         view.setOnTouchListener(new View.OnTouchListener() {
-            long first_click_time = 0;
+            long click_down_time;
+            long click_up_time;
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP){
-                    long click_time = System.currentTimeMillis();
-                    if((click_time - first_click_time <= CLICK_DURATION)){
-                        isVisible = iv_checked_item.getVisibility() == View.VISIBLE;
-                        if(isVisible){
-                            iv_checked_item.setVisibility(View.INVISIBLE);
-                        }else iv_checked_item.setVisibility(View.VISIBLE);
-                    }else {
-                        first_click_time = click_time;
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    click_down_time = System.currentTimeMillis();
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    click_up_time = System.currentTimeMillis();
+                    if ((click_up_time - click_down_time) < MAX_CLICK_DURATION && (click_up_time - click_down_time) > MIN_CLICK_DURATION) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                        alert.setTitle("User Info");
+                        alert.setMessage(String.format("Full name : %s\ngender: %s\ncity: %s", user.getFullname(), user.getGender(), user.getCity()));
+                        alert.setPositiveButton("ok", null);
+                        alert.setCancelable(false);
+                        alert.create().show();
                     }
                 }
-                return false;
+                return true;
             }
         });
 
