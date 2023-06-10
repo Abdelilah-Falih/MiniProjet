@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
 
@@ -44,11 +47,18 @@ public class UserAdapter extends BaseAdapter {
         User user = (User) getItem(position);
 
         TextView tv_fullname = (TextView) view.findViewById(R.id.tv_fullname);
-        TextView tv_gender = (TextView) view.findViewById(R.id.tv_gender);
+        Button btn_details = (Button) view.findViewById(R.id.btn_details);
         TextView tv_city= (TextView) view.findViewById(R.id.tv_city);
         tv_fullname.setText(user.getFullname());
-        tv_gender.setText(user.getGender());
         tv_city.setText(user.getCity());
+        btn_details.setOnClickListener(v->{
+            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+            alert.setTitle("User Info");
+            alert.setMessage(String.format("Full name : %s\ngender: %s\ncity: %s", user.getFullname(), user.getGender(), user.getCity()));
+            alert.setPositiveButton("ok", null);
+            alert.setCancelable(false);
+            alert.create().show();
+        });
 
         return view;
     }
