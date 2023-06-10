@@ -1,9 +1,13 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding ;
     View root;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +36,26 @@ public class MainActivity extends AppCompatActivity {
         root = binding.getRoot();
         setContentView(root);
 
-        binding.btnQuit.setOnClickListener(v-> finish());
+        GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener(){
+            @Override
+            public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
+                if(e1.getX() - e2.getX() >=160) finish();
+                return super.onFling(e1, e2, velocityX, velocityY);
+            }
+
+
+        });
+
+
+        binding.tvSwip.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                gestureDetector.onTouchEvent(event);
+                return true;
+            }
+        });
+
+
 
         binding.btnLoadUsers.setOnClickListener(v->{
             UserAdapter adapter = new UserAdapter(this, getUsers());
