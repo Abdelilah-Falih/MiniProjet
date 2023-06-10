@@ -3,8 +3,9 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.example.myapplication.databinding.ActivityMainBinding;
 
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         binding.btnQuit.setOnClickListener(v-> finish());
 
         binding.btnLoadUsers.setOnClickListener(v->{
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getFullNamesUsers());
+            UserAdapter adapter = new UserAdapter(this, getUsers());
             binding.lvUsersnames.setAdapter(adapter);
         });
 
@@ -49,11 +50,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    ArrayList<String> getFullNamesUsers (){
+    ArrayList<User> getUsers(){
         try (InputStream inputStream = getAssets().open("users.json")){
             int c = inputStream.read();
             StringBuilder jsonString = new StringBuilder();
-            ArrayList<String> fullNames = new ArrayList<>();
+            ArrayList<User> users_obj = new ArrayList<>();
 
             while (c != -1){
                 jsonString.append((char)c);
@@ -66,10 +67,17 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < users.length(); i++) {
                 JSONObject user = users.getJSONObject(i);
                 JSONObject names = user.getJSONObject("name");
-                fullNames.add(String.format("%s %s", names.getString("first"), names.getString("last")));
+
+                users_obj.add(new User(
+                        names.getString("first"),
+                        names.getString("last"),
+                        user.getString("gender"),
+                        user.getString("city")
+                ));
+
             }
 
-            return fullNames;
+            return users_obj;
 
         } catch (IOException | JSONException e) {
             e.printStackTrace();
