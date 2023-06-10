@@ -47,17 +47,17 @@ public class UserAdapter extends BaseAdapter {
         User user = (User) getItem(position);
 
         TextView tv_fullname = (TextView) view.findViewById(R.id.tv_fullname);
-        Button btn_details = (Button) view.findViewById(R.id.btn_details);
         TextView tv_city= (TextView) view.findViewById(R.id.tv_city);
         tv_fullname.setText(user.getFullname());
         tv_city.setText(user.getCity());
-        btn_details.setOnClickListener(v->{
+        view.setOnLongClickListener(v->{
             AlertDialog.Builder alert = new AlertDialog.Builder(context);
             alert.setTitle("User Info");
             alert.setMessage(String.format("Full name : %s\ngender: %s\ncity: %s", user.getFullname(), user.getGender(), user.getCity()));
             alert.setPositiveButton("ok", null);
             alert.setCancelable(false);
             alert.create().show();
+            return true;
         });
 
         return view;
