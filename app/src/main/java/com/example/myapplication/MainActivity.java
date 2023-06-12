@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         binding.btnLoadUsers.setOnClickListener(v->{
-            UserAdapter adapter = new UserAdapter(this, getUsers());
+            UserAdapter adapter = new UserAdapter(this, getUsers(), getSupportFragmentManager());
             binding.lvUsersnames.setAdapter(adapter);
         });
 

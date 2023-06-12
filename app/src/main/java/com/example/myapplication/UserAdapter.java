@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 
@@ -23,13 +24,16 @@ public class UserAdapter extends BaseAdapter {
 
     private final long CLICK_DURATION = 200;
     LayoutInflater inflater;
+    FragmentManager fragmentManager;
 
     boolean isVisible ;
 
-    public UserAdapter(Context context, ArrayList<User> users) {
+    public UserAdapter(Context context, ArrayList<User> users, FragmentManager fragmentManager) {
         this.context = context;
         this.users = users;
+        this.fragmentManager = fragmentManager;
         inflater = LayoutInflater.from(context);
+
     }
 
     @Override
@@ -55,6 +59,7 @@ public class UserAdapter extends BaseAdapter {
         TextView tv_fullname = (TextView) view.findViewById(R.id.tv_fullname);
         TextView tv_city= (TextView) view.findViewById(R.id.tv_city);
         ImageView iv_checked_item= (ImageView) view.findViewById(R.id.iv_checked_item);
+        Button btn_details= (Button) view.findViewById(R.id.btnDetails);
         tv_fullname.setText(user.getFullname());
         tv_city.setText(user.getCity());
         view.setOnLongClickListener(v->{
@@ -65,6 +70,11 @@ public class UserAdapter extends BaseAdapter {
             alert.setCancelable(false);
             alert.create().show();
             return true;
+        });
+
+        btn_details.setOnClickListener(v->{
+            ItemFragmentDialog itemFragmentDialog = new ItemFragmentDialog(user);
+            itemFragmentDialog.show(fragmentManager, null);
         });
 
         view.setOnTouchListener(new View.OnTouchListener() {

@@ -31,10 +31,22 @@
         android:id="@+id/iv_checked_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnDetails"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.515"
         app:srcCompat="@drawable/ic_checked" />
+
+    <Button
+        android:id="@+id/btnDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Details"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_city"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_fullname" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
