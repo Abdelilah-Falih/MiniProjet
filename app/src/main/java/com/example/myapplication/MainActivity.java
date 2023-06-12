@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding ;
     View root;
 
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,22 +37,16 @@ public class MainActivity extends AppCompatActivity {
         root = binding.getRoot();
         setContentView(root);
 
-        GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener(){
+
+
+
+        binding.tvSwip.setOnTouchListener(new FlingManager(this) {
             @Override
-            public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
-                if(e1.getX() - e2.getX() >=160) finish();
-                return super.onFling(e1, e2, velocityX, velocityY);
-            }
-
-
-        });
-
-
-        binding.tvSwip.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                return true;
+            public boolean swipLeft() {
+                if(super.swipLeft()){
+                    finish();
+                }
+                return false;
             }
         });
 
