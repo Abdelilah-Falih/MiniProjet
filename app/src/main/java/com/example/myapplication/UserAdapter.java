@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,14 +20,16 @@ import androidx.appcompat.app.AlertDialog;
 import java.util.ArrayList;
 
 public class UserAdapter extends BaseAdapter {
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+    }
 
-    private Context context;
-    private ArrayList<User> users;
+    private final Context context;
+    private final ArrayList<User> users;
 
-    private final long CLICK_DURATION = 200;
     LayoutInflater inflater;
 
-    boolean isVisible ;
 
     public UserAdapter(Context context, ArrayList<User> users) {
         this.context = context;
@@ -44,7 +49,7 @@ public class UserAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
@@ -54,7 +59,6 @@ public class UserAdapter extends BaseAdapter {
 
         TextView tv_fullname = (TextView) view.findViewById(R.id.tv_fullname);
         TextView tv_city= (TextView) view.findViewById(R.id.tv_city);
-        ImageView iv_checked_item= (ImageView) view.findViewById(R.id.iv_checked_item);
         tv_fullname.setText(user.getFullname());
         tv_city.setText(user.getCity());
         view.setOnLongClickListener(v->{
@@ -67,24 +71,30 @@ public class UserAdapter extends BaseAdapter {
             return true;
         });
 
-        view.setOnTouchListener(new View.OnTouchListener() {
-            long first_click_time = 0;
+        View itemView = view;
+        view.setOnTouchListener(new FlingManager(context){
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP){
-                    long click_time = System.currentTimeMillis();
-                    if((click_time - first_click_time <= CLICK_DURATION)){
-                        isVisible = iv_checked_item.getVisibility() == View.VISIBLE;
-                        if(isVisible){
-                            iv_checked_item.setVisibility(View.INVISIBLE);
-                        }else iv_checked_item.setVisibility(View.VISIBLE);
-                    }else {
-                        first_click_time = click_time;
-                    }
+            public boolean swipLeft() {
+                if(super.swipLeft()) {
+                    itemView.setBackgroundColor(Color.RED);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("Attention !");
+                    alert.setMessage("Do you want to remove the user ?");
+                    alert.setPositiveButton("Yes", (dialog, which) -> {
+                        users.remove(user);
+                        notifyDataSetChanged();
+                        Toast.makeText(context, "User deleted !", Toast.LENGTH_SHORT).show();
+                    }).setNegativeButton("No", ((dialog, which) -> {
+                        notifyDataSetChanged();
+                    })).setCancelable(false);
+                    alert.show();
                 }
                 return false;
             }
+
+
         });
+
 
         return view;
     }
