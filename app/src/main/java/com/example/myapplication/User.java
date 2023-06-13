@@ -6,6 +6,12 @@ public class User {
     private String gender;
     private String city;
 
+    public String getImage_path() {
+        return image_path;
+    }
+
+    private String image_path;
+
     //region getters
     public String getFirstname() {
         return firstname;
@@ -25,11 +31,12 @@ public class User {
     //endregion
 
 
-    public User(String firstname, String lasttname, String gender, String city) {
+    public User(String firstname, String lasttname, String gender, String city, String image_path) {
         this.firstname = firstname;
         this.lasttname = lasttname;
         this.gender = gender;
         this.city = city;
+        this.image_path = image_path;
     }
 
     String getFullname(){

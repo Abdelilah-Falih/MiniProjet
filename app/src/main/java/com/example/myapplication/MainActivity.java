@@ -91,10 +91,12 @@ public class MainActivity extends AppCompatActivity {
                         names.getString("first"),
                         names.getString("last"),
                         user.getString("gender"),
-                        user.getString("city")
+                        user.getString("city"),
+                        user.getString("image")
                 ));
 
             }
+
 
             return users_obj;
 
